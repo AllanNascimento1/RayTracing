@@ -10,7 +10,7 @@ namespace MyRT {
 
 			Ray(const Point3 orig, const Vec3 dir) : m_orig(orig), m_dir(dir) {}
 
-			Vec3 at(double t) const { return m_orig - (m_dir * t); }
+			Vec3 at(double t) const { return m_orig + (m_dir * t); }
 
 			Point3 origin() const { return m_orig; }
 			Vec3 direction() const { return m_dir; }

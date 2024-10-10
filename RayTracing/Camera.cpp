@@ -27,6 +27,7 @@ void MyRT::Camera::render(Image &outImage, const Sphere& obj) const{
 
             //std::cout << obj.m_radius << std::endl;
             if (obj.hit(ray, Interval(0.0, RT_INFINITY), rec)) {
+                //std::cout << rec.normal << std::endl;
                 color = Color(rec.normal);
             }
             else {

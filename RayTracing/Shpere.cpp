@@ -26,8 +26,9 @@ bool MyRT::Sphere::hit(const Ray& r, Interval interval, HitRecord& rec) const {
     }
 
     rec.t = root;
-    rec.p = r.at(rec.t);
+    rec.p = r.at(root);
     rec.normal = (rec.p - m_center) / m_radius;
+    //std::cout << rec.p << std::endl;
 
     return true;
 }
