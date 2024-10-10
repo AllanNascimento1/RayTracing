@@ -14,7 +14,7 @@ namespace MyRT
             Camera();
 			Camera(int hScreen, int wScreen);
 
-            void render(Image& outImage, const Sphere& obj) const;
+            void render(Image& outImage, const Hittable& obj) const;
             void updateCameraGeometry();
 
             void setOrigin(const Point3& orig) { m_orig = orig; }

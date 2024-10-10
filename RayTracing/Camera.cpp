@@ -15,7 +15,7 @@ MyRT::Camera::Camera(int screenWidth, int screenHeight)
 
 MyRT::Camera::Camera() : Camera(600, 960) {}
 
-void MyRT::Camera::render(Image &outImage, const Sphere& obj) const{
+void MyRT::Camera::render(Image &outImage, const Hittable& obj) const{
     for (int y = 0; y < m_imageHeight; y++) {
         for (int x = 0; x < m_imageWidth; x++) {
             Vec3 direction = (m_pixel00 - m_orig) + (m_pixelDeltaW * x) - (m_pixelDeltaH * y);

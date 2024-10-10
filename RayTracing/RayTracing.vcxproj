@@ -146,6 +146,7 @@
   <ItemGroup>
     <ClInclude Include="Camera.hpp" />
     <ClInclude Include="CApp.h" />
+    <ClInclude Include="HittableList.hpp" />
     <ClInclude Include="Image.hpp" />
     <ClInclude Include="Interval.hpp" />
     <ClInclude Include="Ray.hpp" />
