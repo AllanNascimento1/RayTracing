@@ -6,6 +6,9 @@
 #include "Image.hpp"
 #include "Camera.hpp"
 #include "RTutility.hpp"
+
+#include "Hittable.hpp"
+#include "HittableList.hpp"
 #include "Sphere.hpp"
 
 namespace MyRT
@@ -15,6 +18,8 @@ namespace MyRT
 			Scene();
 
 			bool render(Image& outImage);
+
+			Camera& getCamera() { return m_camera; }
 
 		private:
 
