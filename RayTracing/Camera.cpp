@@ -36,7 +36,7 @@ void MyRT::Camera::render(Image &outImage, const Hittable& obj) const{
 
             //set the color found on the image
 
-            /*
+            /**/
             //Normal (normal colors)
             outImage.setPixel(x, y, color * 255.0);
             /**/
