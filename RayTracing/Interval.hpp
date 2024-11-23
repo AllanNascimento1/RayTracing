@@ -1,7 +1,9 @@
 #ifndef INTERVAL_H
 #define INTERVAL_H
 
-#include "RTutility.hpp"
+#include <limits>
+
+const double RT_INFINITY = std::numeric_limits<double>::infinity();
 
 class Interval {
 	public:

@@ -1,5 +1,6 @@
 #include "Camera.hpp"
 #include <iostream>
+#include <random>
 
 MyRT::Camera::Camera(int screenWidth, int screenHeight)
     : m_orig(0.0, 0.0, 0.0),
@@ -7,8 +8,9 @@ MyRT::Camera::Camera(int screenWidth, int screenHeight)
     m_up(0.0, 1.0, 0.0),
     m_focusDistance(1.0),
     m_defocusAngle(1.0),
-    m_fovAngle(90.0),
-    m_numberSamples(10),
+    m_fovAngle(80.0),
+    m_numberSamples(1),
+    m_limitDepth(1),
     m_imageHeight(screenHeight),
     m_imageWidth(screenWidth),
     m_aspectRatio(static_cast<double>(screenWidth) / screenHeight) {}
@@ -18,23 +20,18 @@ MyRT::Camera::Camera() : Camera(600, 960) {}
 void MyRT::Camera::render(Image &outImage, const Hittable& obj) const{
     for (int y = 0; y < m_imageHeight; y++) {
         for (int x = 0; x < m_imageWidth; x++) {
-            //calculates ray vector (not a unit vector)
-            Vec3 direction = (m_pixel00 - m_orig) + (m_pixelDeltaW * x) - (m_pixelDeltaH * y);
-            Ray ray = Ray(m_orig, direction);
+            
+            Color color = Color();
+            for (int sample = 0; sample < m_numberSamples; sample++) {
+                //calculates ray vector (not a unit vector)
+                Ray ray = raySample( x , y );
 
-            //find the color of the pixel
-            HitRecord rec = HitRecord();
-            Color color;
-
-            if (obj.hit(ray, Interval(0.0, RT_INFINITY), rec)) {
-                color = Color(rec.normal);
+                //find the color of the pixel
+                HitRecord rec = HitRecord();
+                color += rayColor(ray, obj, 0);
             }
-            else {
-                //color of the sky
-                color = rayColor(ray);
-            }
-
-            //set the color found on the image
+            color = color / m_numberSamples;
+            //Set the color found on the image
 
             /**/
             //Normal (normal colors)
@@ -51,15 +48,42 @@ void MyRT::Camera::render(Image &outImage, const Hittable& obj) const{
     }
 }
 
-Color MyRT::Camera::rayColor(const Ray& ray) const {
+Color MyRT::Camera::rayColor(const Ray& ray, const Hittable& obj, int depth) const {
+    if (depth > m_limitDepth) {
+        return Color(0.0, 0.0, 0.0);
+    }
+
+    HitRecord rec = HitRecord();
+    
+    //Vec3 lightDir = Vec3(-1.0, -1.0, 1.0);
+    if (obj.hit(ray, Interval(0.0001, RT_INFINITY), rec)) {
+        Ray rOut = Ray();
+        Color att = Color();
+        
+        if (rec.mat->scatter(ray, rec, att, rOut)) {
+            //std::cout << rOut.origin() << std::endl;
+            return att * rayColor(rOut, obj, depth+1);
+        }
+        
+        return att; //* dot(-rec.normal,lightDir);
+    }
+
     Vec3 unitDirection = unit_vector(ray.direction());
     double a = 0.5 * (unitDirection.y() + 1.0);
     return (1.0 - a) * Vec3(1., 1., 1.) + a * Vec3(0.3, 0.5, 1.);
+}
+ 
+MyRT::Ray MyRT::Camera::raySample(int i, int j) const {
+    Vec3 off = Vec3::randomVec(-0.5, 0.5);
+    Vec3 direction = m_pixel00 + ((off.x() + i) * m_pixelDeltaW) - ((off.y() + j) * m_pixelDeltaH);
+
+    return Ray(m_orig, direction - m_orig);
 }
 
 void MyRT::Camera::updateCameraGeometry() {
     m_foward = unit_vector(m_lookAt - m_orig);
     m_right = cross(m_up, m_foward);
+    m_up = cross(m_foward, m_right);
 
     double diskRadious = m_focusDistance * tan(radians(m_defocusAngle/2.0));
     m_defocusH = diskRadious * m_up;

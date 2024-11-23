@@ -33,13 +33,22 @@
     <ClCompile Include="Hittable.hpp">
       <Filter>Header Files</Filter>
     </ClCompile>
-    <ClCompile Include="Shpere.cpp">
+    <ClCompile Include="Sphere.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Interval.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="HittableList.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Square.hpp">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Square.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Lambertian.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

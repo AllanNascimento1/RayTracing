@@ -60,6 +60,8 @@ void Image::setPixel(const int x, const int y, Color color) {
 }
 
 Uint32 Image::convertColor(const Color color) {
+	// unsigned char is a 8 bit variable that goes from 0 -> 255 instead
+	// of -128 -> 127 of normal chars
 	unsigned char r = static_cast<unsigned char>(color.x());
 	unsigned char g = static_cast<unsigned char>(color.y());
 	unsigned char b = static_cast<unsigned char>(color.z());

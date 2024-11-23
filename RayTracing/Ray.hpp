@@ -1,7 +1,7 @@
 #ifndef RAY_H
 #define RAY_H
 
-#include "RTutility.hpp"
+#include "Vec3.hpp"
 
 namespace MyRT {
 

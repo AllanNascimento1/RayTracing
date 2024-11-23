@@ -1,8 +1,14 @@
 #include "Sphere.hpp"
 
-MyRT::Sphere::Sphere() : m_center(Point3(0.0, 0.0, 0.0)), m_radius(1.0) {}
+MyRT::Sphere::Sphere() 
+    : m_center(Point3(0.0, 0.0, 0.0)), 
+    m_radius(1.0), 
+    m_material(std::make_shared<Material>(Material())) {}
 
-MyRT::Sphere::Sphere(const Point3 center, const double radious) : m_center(center), m_radius(radious) {}
+MyRT::Sphere::Sphere(const Point3 center, const double radious, const shared_ptr<Material> material)
+    : m_center(center), 
+    m_radius(radious), 
+    m_material(material){}
 
 bool MyRT::Sphere::hit(const Ray& r, Interval interval, HitRecord& rec) const {
     //Interval interval;
@@ -19,12 +25,16 @@ bool MyRT::Sphere::hit(const Ray& r, Interval interval, HitRecord& rec) const {
 
     // Find the nearest root that lies in the acceptable range.
     auto root = (h - sqrtd) / a;
+    
     if (!interval.surrounds(root)) {
         root = (h + sqrtd) / a;
         if (!interval.surrounds(root))
             return false;
     }
 
+    //std::cout << root << std::endl;
+
+    rec.mat = m_material;
     rec.t = root;
     rec.p = r.at(root);
     Vec3 normal = (rec.p - m_center) / m_radius;

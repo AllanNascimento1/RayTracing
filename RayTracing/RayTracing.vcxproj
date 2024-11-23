@@ -139,9 +139,12 @@
     <ClCompile Include="HittableList.cpp" />
     <ClCompile Include="Image.cpp" />
     <ClCompile Include="Interval.cpp" />
+    <ClCompile Include="Lambertian.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Scene.cpp" />
-    <ClCompile Include="Shpere.cpp" />
+    <ClCompile Include="Sphere.cpp" />
+    <ClCompile Include="Square.cpp" />
+    <ClCompile Include="Square.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.hpp" />

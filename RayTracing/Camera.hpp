@@ -5,7 +5,6 @@
 #include "Image.hpp"
 #include "Ray.hpp"
 #include "Hittable.hpp"
-#include "Sphere.hpp"
 
 namespace MyRT
 {
@@ -17,7 +16,8 @@ namespace MyRT
             void render(Image& outImage, const Hittable& obj) const;
             void updateCameraGeometry();
 
-            void moveLookAt(Vec3 vec) { m_lookAt += vec; };
+            void moveLookAt(Vec3 vec) { m_lookAt += unit_vector(vec.x()*m_right + vec.y()*m_up); };
+            void moveOrig(Vec3 vec) { m_orig += unit_vector(vec.x() * m_right + vec.y() * m_up); };
 
             void setOrigin(const Point3& orig) { m_orig = orig; }
             void setLookAt(const Point3& lookAt) { m_lookAt = lookAt; }
@@ -26,7 +26,8 @@ namespace MyRT
 
         private:
 
-            Color rayColor(const Ray& ray) const;
+            Color rayColor(const Ray& ray, const Hittable& obj, int depth) const;
+            Ray raySample(int i , int j) const;
 
 		private:
             int m_imageHeight;
@@ -60,6 +61,9 @@ namespace MyRT
 
             //number of rays shoot per pixel
             int m_numberSamples;
+            
+            //maximum number of bounces a ray can make 
+            int m_limitDepth;
 	};
 }
 
