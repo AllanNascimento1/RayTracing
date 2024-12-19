@@ -3,7 +3,18 @@
 
 #include <cmath>
 #include <iostream>
-#include <random>
+
+
+inline uint32_t PCG_Hash(uint32_t input) {
+    uint32_t state = input * 747796405u + 2891336453u;
+    uint32_t word = (state >> ((state >> 28u) + 4u)) ^ state;
+    return (word >> 22u) ^ word;
+}
+
+inline double randomDouble(uint32_t& seed) {
+    seed = PCG_Hash(seed);
+    return (double)seed / (double)std::numeric_limits<uint32_t>::max();
+}
 
 class Vec3 {
 public:
@@ -46,15 +57,30 @@ public:
         return (e[0] * e[0]) + (e[1] * e[1]) + (e[2] * e[2]);
     }
 
-    static Vec3 randomVec(double min , double max) {
-        std::random_device rd;
-        std::mt19937 gen(rd());
-        std::uniform_real_distribution<double> dist( min , max );
-
-        return Vec3(dist(gen), dist(gen), dist(gen));
+    /**/
+    static Vec3 randomVec(uint32_t& seed, double min , double max) {
+        return Vec3(
+            (randomDouble(seed) * max) + min,
+            (randomDouble(seed) * max) + min,
+            (randomDouble(seed) * max) + min
+        );
     }
 
+    static Vec3 randomUnitVec(uint32_t& seed) {
+        while (true) {
+            Vec3 randVec = Vec3::randomVec(seed, -1.0, 1.0);
+
+            double lengSqrt = randVec.length_squared();
+
+            if (1e-160 < lengSqrt && lengSqrt < 1.0) {
+                return randVec;
+            }
+        }
+    }
+    /**/
 };
+
+
 
 // point3 and Color is just an alias for Vec3.
 using Point3 = Vec3;
@@ -104,18 +130,6 @@ inline Vec3 cross(const Vec3& u, const Vec3& v) {
 
 inline Vec3 unit_vector(const Vec3& v) {
     return v / v.length();
-}
-
-inline Vec3 randomUnitVec() {
-    while (true) {
-        Vec3 randVec = Vec3::randomVec( -1.0 , 1.0 );
-        
-        double lengSqrt = randVec.length_squared();
-
-        if (1e-160 < lengSqrt && lengSqrt < 1.0) {
-            return randVec;
-        }
-    }
 }
 
 #endif

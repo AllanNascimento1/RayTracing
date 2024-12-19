@@ -3,8 +3,8 @@
 
 #include <memory>
 
-#include "Vec3.hpp"
 #include "Interval.hpp"
+#include "Vec3.hpp"
 
 using std::shared_ptr;
 

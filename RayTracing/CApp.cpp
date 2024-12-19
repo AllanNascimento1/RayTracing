@@ -2,8 +2,8 @@
 #include "CApp.h"
 
 CApp::CApp() {
-	m_wWindow = 480; //960 720 480
-	m_hWindow = 300; //600 450 300
+	m_wWindow = 960; //960 720 480
+	m_hWindow = 600; //600 450 300
 	isRunning = true;
 	m_pWindow = NULL;
 	m_pRenderer = NULL;
@@ -54,9 +54,11 @@ void CApp::onEvent(SDL_Event* event) {
 	if (event->type == SDL_QUIT) {
 		isRunning = false;
 	}
+	/**/
 	else if(event->type == SDL_KEYDOWN){
 		char keyPressed = event->key.keysym.sym;
 		switch (keyPressed) {
+			
 			case 'a':
 				m_scene.getCamera().moveLookAt(Vec3(-0.1, 0.0, 0.0));
 				break;
@@ -83,6 +85,7 @@ void CApp::onEvent(SDL_Event* event) {
 				break;
 		}
 	}
+	/**/
 }
 
 void CApp::onLoop() {
@@ -93,9 +96,13 @@ void CApp::onRender() {
 	SDL_SetRenderDrawColor(m_pRenderer, 100, 0, 100, 255);
 	SDL_RenderClear(m_pRenderer);
 
+	Uint32 start = SDL_GetTicks();
 	m_scene.render(m_image);
+	std::cout << "Render time: " << (SDL_GetTicks() - start) << "ms" << std::endl;
 
+	start = SDL_GetTicks();
 	m_image.display();
+	std::cout << "Display time: " << (SDL_GetTicks() - start) << "ms" << std::endl;
 
 	SDL_RenderPresent(m_pRenderer);
 }

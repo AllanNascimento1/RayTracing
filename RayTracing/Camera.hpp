@@ -27,7 +27,7 @@ namespace MyRT
         private:
 
             Color rayColor(const Ray& ray, const Hittable& obj, int depth) const;
-            Ray raySample(int i , int j) const;
+            Ray raySample(int i , int j, uint32_t seed) const;
 
 		private:
             int m_imageHeight;

@@ -31,7 +31,7 @@ bool MyRT::Scene::render(Image& outImage) {
 	HittableList world = HittableList();
 
 	const shared_ptr<Material> NONE = make_shared<Material>(Material());
-	const shared_ptr<Lambertian> LAMB_RED = make_shared<Lambertian>(Color(1.0, 0.0, 0.0));
+	const shared_ptr<Lambertian> LAMB_TEMP1 = make_shared<Lambertian>(Color(1.0, 0.0, 1.0));
 
 	/*
 	world.add(std::make_shared<Sphere>(Point3(3.0, -3.0, 5.0), 0.5));
@@ -45,9 +45,10 @@ bool MyRT::Scene::render(Image& outImage) {
 	/**/
 
 	world.add(std::make_shared<Sphere>(Point3(0.0, 0.0, 0.0), 0.5, NONE));
-	//world.add(std::make_shared<Sphere>(Point3(0.0, 0.6, 0.0), 0.1, NONE));
-	//world.add(std::make_shared<Sphere>(Point3(0.6, 0.0, 0.0), 0.1, NONE));
-	//world.add(std::make_shared<Sphere>(Point3(0.0, 0.0, -0.6), 0.1, NONE));
+	world.add(std::make_shared<Sphere>(Point3(0.0, 1.0, 0.0), 0.1, NONE));
+	world.add(std::make_shared<Sphere>(Point3(1.0, 0.0, 0.0), 0.1, NONE));
+	world.add(std::make_shared<Sphere>(Point3(0.0, 0.0, -1.0), 0.1, NONE));
+
 	//world.add(std::make_shared<Square>());
 
 	//render the image

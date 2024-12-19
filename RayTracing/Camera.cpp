@@ -9,8 +9,8 @@ MyRT::Camera::Camera(int screenWidth, int screenHeight)
     m_focusDistance(1.0),
     m_defocusAngle(1.0),
     m_fovAngle(80.0),
-    m_numberSamples(1),
-    m_limitDepth(1),
+    m_numberSamples(1), // devo trovare un random migliore
+    m_limitDepth(100),
     m_imageHeight(screenHeight),
     m_imageWidth(screenWidth),
     m_aspectRatio(static_cast<double>(screenWidth) / screenHeight) {}
@@ -21,10 +21,12 @@ void MyRT::Camera::render(Image &outImage, const Hittable& obj) const{
     for (int y = 0; y < m_imageHeight; y++) {
         for (int x = 0; x < m_imageWidth; x++) {
             
+            /**/
             Color color = Color();
             for (int sample = 0; sample < m_numberSamples; sample++) {
                 //calculates ray vector (not a unit vector)
-                Ray ray = raySample( x , y );
+                uint32_t seed = y * 1372 + x * 571 + sample;
+                Ray ray = raySample( x , y , seed);
 
                 //find the color of the pixel
                 HitRecord rec = HitRecord();
@@ -34,8 +36,12 @@ void MyRT::Camera::render(Image &outImage, const Hittable& obj) const{
             //Set the color found on the image
 
             /**/
+
+            /**/
+            
             //Normal (normal colors)
             outImage.setPixel(x, y, color * 255.0);
+
             /**/
 
             /*
@@ -44,6 +50,7 @@ void MyRT::Camera::render(Image &outImage, const Hittable& obj) const{
             outImage.setPixel(x, y, Color(temp, temp, temp) * 255.0);
             /**/
 
+            
         }
     }
 }
@@ -60,11 +67,13 @@ Color MyRT::Camera::rayColor(const Ray& ray, const Hittable& obj, int depth) con
         Ray rOut = Ray();
         Color att = Color();
         
+        
         if (rec.mat->scatter(ray, rec, att, rOut)) {
             //std::cout << rOut.origin() << std::endl;
             return att * rayColor(rOut, obj, depth+1);
         }
         
+
         return att; //* dot(-rec.normal,lightDir);
     }
 
@@ -73,9 +82,9 @@ Color MyRT::Camera::rayColor(const Ray& ray, const Hittable& obj, int depth) con
     return (1.0 - a) * Vec3(1., 1., 1.) + a * Vec3(0.3, 0.5, 1.);
 }
  
-MyRT::Ray MyRT::Camera::raySample(int i, int j) const {
-    Vec3 off = Vec3::randomVec(-0.5, 0.5);
-    Vec3 direction = m_pixel00 + ((off.x() + i) * m_pixelDeltaW) - ((off.y() + j) * m_pixelDeltaH);
+MyRT::Ray MyRT::Camera::raySample(int i, int j, uint32_t seed) const {
+    Vec3 offset = Vec3(0.0, 0.0, 0.0);//Vec3::randomUnitVec(seed); //RandomVec è TROPPO lento
+    Vec3 direction = m_pixel00 + ((offset.x() + i) * m_pixelDeltaW) - ((offset.y() + j) * m_pixelDeltaH);
 
     return Ray(m_orig, direction - m_orig);
 }

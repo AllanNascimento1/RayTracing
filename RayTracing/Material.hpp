@@ -1,8 +1,7 @@
 #ifndef MATERIAL_HPP
 #define MATERIAL_HPP
 
-#include "Ray.hpp";
-//#include "Hittable.hpp";
+#include "Ray.hpp"
 
 namespace MyRT {
 
