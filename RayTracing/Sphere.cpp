@@ -12,10 +12,26 @@ MyRT::Sphere::Sphere(const Point3 center, const double radious, const shared_ptr
 
 bool MyRT::Sphere::hit(const Ray& r, Interval interval, HitRecord& rec) const {
     //Interval interval;
+
+    Vec3 matrixVecX = Vec3(1.0, 0.0, 0.0);
+    Vec3 matrixVecY = Vec3(0.0, 1.0, 0.0);
+    Vec3 matrixVecZ = Vec3(0.0, 0.0, 1.0);
+
+    Vec3 tempDir = (r.direction() * matrixVecX) + (r.direction() * matrixVecY) + (r.direction() * matrixVecZ);
+    Point3 tempOrig = (r.origin() * matrixVecX) + (r.origin() * matrixVecY) + (r.origin() * matrixVecZ);
+    Ray tempRay= Ray(tempOrig, tempDir);
+
+    Vec3 oc = m_center - tempOrig;
+    auto a = tempDir.length_squared();
+    auto h = dot(tempDir, oc);
+    auto c = oc.length_squared() - m_radius * m_radius;
+    
+    /*
     Vec3 oc = m_center - r.origin();
     auto a = r.direction().length_squared();
     auto h = dot(r.direction(), oc);
     auto c = oc.length_squared() - m_radius * m_radius;
+    /**/
 
     auto discriminant = h * h - a * c;
     if (discriminant < 0)
@@ -36,9 +52,10 @@ bool MyRT::Sphere::hit(const Ray& r, Interval interval, HitRecord& rec) const {
 
     rec.mat = m_material;
     rec.t = root;
-    rec.p = r.at(root);
+    rec.p = tempRay.at(root);
     Vec3 normal = (rec.p - m_center) / m_radius;
-    rec.setFaceNormal(r, normal);
+    normal = (normal * matrixVecX) + (normal * matrixVecY) + (normal * matrixVecZ);
+    rec.setFaceNormal(r, unit_vector(normal));
 
     return true;
 }

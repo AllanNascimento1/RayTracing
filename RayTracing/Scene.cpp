@@ -13,46 +13,57 @@ MyRT::Scene::Scene() {
 
 	//initialize camera
 	m_camera.setLookAt(Point3(0.0, 0.0, 0.0));
-	m_camera.setOrigin(Point3(0.0, 0.0, -2.0));
+	m_camera.setOrigin(Point3(0.0, 2.0, -2.0));
 }
 
-double test = 0;
+bool test = false;
 
 bool MyRT::Scene::render(Image& outImage) {
+
+	if (true) {
+		
+		int xSize = outImage.getXSize();
+		int ySize = outImage.getYSize();
+		m_camera.setImgHeight(ySize);
+		m_camera.setImgWidth(xSize);
+
+		m_camera.updateCameraGeometry();
+		test = true;
+
+	}
+
 	
-	int xSize = outImage.getXSize();
-	int ySize = outImage.getYSize();
-	m_camera.setImgHeight(ySize);
-	m_camera.setImgWidth(xSize);
-
-	m_camera.updateCameraGeometry();
-
 	//create 3D Scene (for now)
 	HittableList world = HittableList();
 
+	/**/
 	const shared_ptr<Material> NONE = make_shared<Material>(Material());
-	const shared_ptr<Lambertian> LAMB_TEMP1 = make_shared<Lambertian>(Color(1.0, 0.0, 1.0));
+	const shared_ptr<Lambertian> LAMB_TEMP1 = make_shared<Lambertian>(Color(0.6, 0.6, 0.6));
 
 	/*
-	world.add(std::make_shared<Sphere>(Point3(3.0, -3.0, 5.0), 0.5));
-	world.add(std::make_shared<Sphere>(Point3(3.0, -3.0, 10.0), 0.5));
-	world.add(std::make_shared<Sphere>(Point3(3.0, 3.0, 5.0), 0.5));
-	world.add(std::make_shared<Sphere>(Point3(3.0, 3.0, 10.0), 0.5));
-	world.add(std::make_shared<Sphere>(Point3(-3.0, -3.0, 5.0), 0.5));
-	world.add(std::make_shared<Sphere>(Point3(-3.0, -3.0, 10.0), 0.5));
-	world.add(std::make_shared<Sphere>(Point3(-3.0, 3.0, 5.0), 0.5));
-	world.add(std::make_shared<Sphere>(Point3(-3.0, 3.0, 10.0), 0.5));
+	world.add(std::make_shared<Sphere>(Point3(3.0, -3.0, 5.0), 0.5, NONE));
+	world.add(std::make_shared<Sphere>(Point3(3.0, -3.0, 10.0), 0.5, NONE));
+	world.add(std::make_shared<Sphere>(Point3(3.0, 3.0, 5.0), 0.5, NONE));
+	world.add(std::make_shared<Sphere>(Point3(3.0, 3.0, 10.0), 0.5, NONE));
+	world.add(std::make_shared<Sphere>(Point3(-3.0, -3.0, 5.0), 0.5, NONE));
+	world.add(std::make_shared<Sphere>(Point3(-3.0, -3.0, 10.0), 0.5, NONE));
+	world.add(std::make_shared<Sphere>(Point3(-3.0, 3.0, 5.0), 0.5, NONE));
+	world.add(std::make_shared<Sphere>(Point3(-3.0, 3.0, 10.0), 0.5, NONE));
 	/**/
 
-	world.add(std::make_shared<Sphere>(Point3(0.0, 0.0, 0.0), 0.5, NONE));
-	world.add(std::make_shared<Sphere>(Point3(0.0, 1.0, 0.0), 0.1, NONE));
-	world.add(std::make_shared<Sphere>(Point3(1.0, 0.0, 0.0), 0.1, NONE));
-	world.add(std::make_shared<Sphere>(Point3(0.0, 0.0, -1.0), 0.1, NONE));
+	/**/
+	world.add(std::make_shared<Sphere>(Point3(0.0, 0.0, 0.0), 0.5, LAMB_TEMP1));
+	
+	world.add(std::make_shared<Sphere>(Point3(1.0, 0.0, 0.0), 0.5, NONE));
+	world.add(std::make_shared<Sphere>(Point3(-1.0, 0.0, 0.0), 0.5, NONE));
+	world.add(std::make_shared<Sphere>(Point3(0.0, 0.0, 1.0), 0.5, NONE));
+	world.add(std::make_shared<Sphere>(Point3(0.0, 0.0, -1.0), 0.5, NONE));
+	/**/
 
-	//world.add(std::make_shared<Square>());
+	//world.add(std::make_shared<Square>(NONE));
 
 	//render the image
 	m_camera.render(outImage, world);
-
+	
 	return true;
 }

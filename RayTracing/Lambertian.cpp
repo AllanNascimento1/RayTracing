@@ -7,12 +7,14 @@ bool MyRT::Material::scatter(const Ray& rayIn, const HitRecord& rec, Color& att,
 	return false;	
 }
 
+uint32_t seedTemp = 10;
+
 bool MyRT::Lambertian::scatter(const Ray& rayIn, const HitRecord& rec, Color& att, Ray& rayOut) const {
-	att = Color(0.0, 0.0, 0.0);
+	att = Color(1.0, 1.0, 1.0);
 	if (rec.isOutside) {
 		att = m_albedo;
-		uint32_t seed = rayIn.direction().x() + rec.p.y();
-		rayOut = Ray(rec.p, rec.normal); // + Vec3::randomUnitVec(seed));
+		seedTemp += rayIn.direction().x() + rec.p.y();
+		rayOut = Ray(rec.p, rec.normal + Vec3::randomUnitVec(seedTemp));
 	}
 	return rec.isOutside;
 }

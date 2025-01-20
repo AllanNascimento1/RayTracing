@@ -32,6 +32,8 @@ bool CApp::onInit() {
 	return true;
 }
 
+uint32_t frame = 0;
+
 int CApp::onExecute() {
 	SDL_Event event;
 
@@ -39,6 +41,7 @@ int CApp::onExecute() {
 		return -1;
 	}
 	while (isRunning) {
+		
 		while (SDL_PollEvent(&event) != 0) {
 			onEvent(&event);
 		}
@@ -46,7 +49,7 @@ int CApp::onExecute() {
 		onLoop();
 
 		onRender();
-
+		frame++;
 	}
 }
 
@@ -70,6 +73,12 @@ void CApp::onEvent(SDL_Event* event) {
 				break;
 			case 'w':
 				m_scene.getCamera().moveLookAt(Vec3(0.0, 0.1, 0.0));
+				break;
+			case 'e':
+				m_scene.getCamera().setLookAt(m_scene.getCamera().getFoward() + m_scene.getCamera().getOrig());
+				break;
+			case 'q':
+				m_scene.getCamera().setLookAt(m_scene.getCamera().getFoward());
 				break;
 			case 'j':
 				m_scene.getCamera().moveOrig(Vec3(-0.1, 0.0, 0.0));
@@ -98,11 +107,11 @@ void CApp::onRender() {
 
 	Uint32 start = SDL_GetTicks();
 	m_scene.render(m_image);
-	std::cout << "Render time: " << (SDL_GetTicks() - start) << "ms" << std::endl;
+	std::clog << "Render time: " << (SDL_GetTicks() - start) << "ms" << ' '  << std::flush;
 
 	start = SDL_GetTicks();
 	m_image.display();
-	std::cout << "Display time: " << (SDL_GetTicks() - start) << "ms" << std::endl;
+	std::clog << "\nDisplay time: " << (SDL_GetTicks() - start) << "ms\n" << std::flush;
 
 	SDL_RenderPresent(m_pRenderer);
 }

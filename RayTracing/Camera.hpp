@@ -19,6 +19,8 @@ namespace MyRT
             void moveLookAt(Vec3 vec) { m_lookAt += unit_vector(vec.x()*m_right + vec.y()*m_up); };
             void moveOrig(Vec3 vec) { m_orig += unit_vector(vec.x() * m_right + vec.y() * m_up); };
 
+            Vec3 getFoward() { return m_foward; }
+            Point3 getOrig() { return m_orig; }
             void setOrigin(const Point3& orig) { m_orig = orig; }
             void setLookAt(const Point3& lookAt) { m_lookAt = lookAt; }
             void setImgHeight(const int height) { m_aspectRatio = static_cast<double>(m_imageWidth) / height; m_imageHeight = height; }
@@ -61,7 +63,7 @@ namespace MyRT
 
             //number of rays shoot per pixel
             int m_numberSamples;
-            
+
             //maximum number of bounces a ray can make 
             int m_limitDepth;
 	};

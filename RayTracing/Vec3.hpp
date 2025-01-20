@@ -6,14 +6,12 @@
 
 
 inline uint32_t PCG_Hash(uint32_t input) {
-    uint32_t state = input * 747796405u + 2891336453u;
-    uint32_t word = (state >> ((state >> 28u) + 4u)) ^ state;
-    return (word >> 22u) ^ word;
+    return input * 1664525u + 1013904223u; // Simpler hash
 }
 
 inline double randomDouble(uint32_t& seed) {
     seed = PCG_Hash(seed);
-    return (double)seed / (double)std::numeric_limits<uint32_t>::max();
+    return seed * (1.0 / 4294967295.0); // Replace division with multiplication
 }
 
 class Vec3 {
@@ -60,9 +58,9 @@ public:
     /**/
     static Vec3 randomVec(uint32_t& seed, double min , double max) {
         return Vec3(
-            (randomDouble(seed) * max) + min,
-            (randomDouble(seed) * max) + min,
-            (randomDouble(seed) * max) + min
+            (randomDouble(seed) * (max - min)) + min,
+            (randomDouble(seed) * (max - min)) + min,
+            (randomDouble(seed) * (max - min)) + min
         );
     }
 

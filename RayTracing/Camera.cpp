@@ -9,7 +9,7 @@ MyRT::Camera::Camera(int screenWidth, int screenHeight)
     m_focusDistance(1.0),
     m_defocusAngle(1.0),
     m_fovAngle(80.0),
-    m_numberSamples(1), // devo trovare un random migliore
+    m_numberSamples(1),
     m_limitDepth(100),
     m_imageHeight(screenHeight),
     m_imageWidth(screenWidth),
@@ -25,24 +25,21 @@ void MyRT::Camera::render(Image &outImage, const Hittable& obj) const{
             Color color = Color();
             for (int sample = 0; sample < m_numberSamples; sample++) {
                 //calculates ray vector (not a unit vector)
-                uint32_t seed = y * 1372 + x * 571 + sample;
+                uint32_t seed = y + x + sample;
                 Ray ray = raySample( x , y , seed);
 
                 //find the color of the pixel
                 HitRecord rec = HitRecord();
+
+                
                 color += rayColor(ray, obj, 0);
+                
             }
             color = color / m_numberSamples;
             //Set the color found on the image
-
-            /**/
-
-            /**/
             
             //Normal (normal colors)
             outImage.setPixel(x, y, color * 255.0);
-
-            /**/
 
             /*
             //Black and White (pretty cool)
@@ -63,6 +60,7 @@ Color MyRT::Camera::rayColor(const Ray& ray, const Hittable& obj, int depth) con
     HitRecord rec = HitRecord();
     
     //Vec3 lightDir = Vec3(-1.0, -1.0, 1.0);
+    /**/
     if (obj.hit(ray, Interval(0.0001, RT_INFINITY), rec)) {
         Ray rOut = Ray();
         Color att = Color();
@@ -76,14 +74,16 @@ Color MyRT::Camera::rayColor(const Ray& ray, const Hittable& obj, int depth) con
 
         return att; //* dot(-rec.normal,lightDir);
     }
+    /**/
 
     Vec3 unitDirection = unit_vector(ray.direction());
     double a = 0.5 * (unitDirection.y() + 1.0);
-    return (1.0 - a) * Vec3(1., 1., 1.) + a * Vec3(0.3, 0.5, 1.);
+    return (1.0 - a) * Vec3(1.0, 1.0, 1.0) + a * Vec3(0.3, 0.5, 1.);
+    //return (1.0 - a) * Vec3(0.0, 0.0, 0.0) + a * Vec3(0.0, 0.0, 0.0); //The void
 }
  
 MyRT::Ray MyRT::Camera::raySample(int i, int j, uint32_t seed) const {
-    Vec3 offset = Vec3(0.0, 0.0, 0.0);//Vec3::randomUnitVec(seed); //RandomVec è TROPPO lento
+    Vec3 offset = Vec3::randomUnitVec(seed); //RandomVec è TROPPO lento
     Vec3 direction = m_pixel00 + ((offset.x() + i) * m_pixelDeltaW) - ((offset.y() + j) * m_pixelDeltaH);
 
     return Ray(m_orig, direction - m_orig);

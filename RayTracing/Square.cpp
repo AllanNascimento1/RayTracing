@@ -14,6 +14,7 @@ bool MyRT::Square::hit(const Ray& r, Interval interval, HitRecord& rec) const {
 			rec.normal = Vec3(0.5, 0.0, 1.0);
 			rec.t = root;
 			rec.p = tempPoint;
+			rec.mat = m_material;
 			return true;
 		}
 	}
