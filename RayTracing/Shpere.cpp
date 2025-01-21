@@ -27,8 +27,8 @@ bool MyRT::Sphere::hit(const Ray& r, Interval interval, HitRecord& rec) const {
 
     rec.t = root;
     rec.p = r.at(root);
-    Vec3 normal = (rec.p - m_center) / m_radius;
-    rec.setFaceNormal(r, normal);
+    rec.normal = (rec.p - m_center) / m_radius;
+    //std::cout << rec.p << std::endl;
 
     return true;
 }

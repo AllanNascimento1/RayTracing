@@ -15,40 +15,28 @@ MyRT::Camera::Camera(int screenWidth, int screenHeight)
 
 MyRT::Camera::Camera() : Camera(600, 960) {}
 
-void MyRT::Camera::render(Image &outImage, const Hittable& obj) const{
+void MyRT::Camera::render(Image &outImage, const Sphere& obj) const{
     for (int y = 0; y < m_imageHeight; y++) {
         for (int x = 0; x < m_imageWidth; x++) {
-            //calculates ray vector (not a unit vector)
             Vec3 direction = (m_pixel00 - m_orig) + (m_pixelDeltaW * x) - (m_pixelDeltaH * y);
             Ray ray = Ray(m_orig, direction);
 
-            //find the color of the pixel
             HitRecord rec = HitRecord();
+
             Color color;
 
+            //std::cout << obj.m_radius << std::endl;
             if (obj.hit(ray, Interval(0.0, RT_INFINITY), rec)) {
+                //std::cout << rec.normal << std::endl;
                 color = Color(rec.normal);
             }
             else {
-                //color of the sky
                 color = rayColor(ray);
             }
-
-            //set the color found on the image
-
-            /**/
-            //Normal (normal colors)
             outImage.setPixel(x, y, color * 255.0);
-            /**/
-
-            /*
-            //Black and White (pretty cool)
-            double temp = (color.x() + color.y() + color.z()) / 3.0;
-            outImage.setPixel(x, y, Color(temp, temp, temp) * 255.0);
-            /**/
-
         }
     }
+    
 }
 
 Color MyRT::Camera::rayColor(const Ray& ray) const {
@@ -76,4 +64,5 @@ void MyRT::Camera::updateCameraGeometry() {
 
     Point3 viewportUpLeft = m_orig + (m_focusDistance * m_foward) + (viewportHvec / 2.0) - (viewportWvec /2.0);
     m_pixel00 = viewportUpLeft + (0.5 * (m_pixelDeltaW - m_pixelDeltaH));
+    //std::cout << m_foward << std::endl;
 }

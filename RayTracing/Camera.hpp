@@ -14,10 +14,8 @@ namespace MyRT
             Camera();
 			Camera(int hScreen, int wScreen);
 
-            void render(Image& outImage, const Hittable& obj) const;
+            void render(Image& outImage, const Sphere& obj) const;
             void updateCameraGeometry();
-
-            void moveLookAt(Vec3 vec) { m_lookAt += vec; };
 
             void setOrigin(const Point3& orig) { m_orig = orig; }
             void setLookAt(const Point3& lookAt) { m_lookAt = lookAt; }

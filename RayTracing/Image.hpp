@@ -4,7 +4,7 @@
 #include <SDL.h>
 #include <vector>
 #include <string>
-#include "Vec3.hpp"
+#include "Color.hpp"
 
 class Image {
 	public:
