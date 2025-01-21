@@ -27,7 +27,7 @@ void Image::initialize(const int xSize, const int ySize, SDL_Renderer* renderer)
 void Image::display() {
 	Uint32* tempPixels = new Uint32[m_xSize * m_ySize];
 
-	//memset(array, value, size) - sets array elements to the value
+	//memset(array, value, size) - sets array elements to the value in this case 0
 	memset(tempPixels, 0, m_xSize * m_ySize * sizeof(Uint32));
 
 	for (int x = 0; x < m_xSize; x++) {
