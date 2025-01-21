@@ -4,7 +4,6 @@
 #include "RTutility.hpp"
 
 namespace MyRT {
-
 	class Ray {
 		public:
 			Ray() : m_orig(Point3(0.0, 0.0, 0.0)), m_dir(Vec3(0.0, 0.0, 0.0)) {}
@@ -21,7 +20,6 @@ namespace MyRT {
 			Vec3 m_dir;
 
 	};
-
 }
 
 #endif // !RAY_H
