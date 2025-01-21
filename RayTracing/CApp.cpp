@@ -78,7 +78,7 @@ void CApp::onEvent(SDL_Event* event) {
 				m_scene.getCamera().setLookAt(m_scene.getCamera().getFoward() + m_scene.getCamera().getOrig());
 				break;
 			case 'q':
-				m_scene.getCamera().setLookAt(m_scene.getCamera().getFoward());
+				m_scene.getCamera().setLookAt(Vec3(0.0, 0.0, 0.0));
 				break;
 			case 'j':
 				m_scene.getCamera().moveOrig(Vec3(-0.1, 0.0, 0.0));

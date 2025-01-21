@@ -9,7 +9,7 @@ MyRT::Camera::Camera(int screenWidth, int screenHeight)
     m_focusDistance(1.0),
     m_defocusAngle(1.0),
     m_fovAngle(80.0),
-    m_numberSamples(1),
+    m_numberSamples(5),
     m_limitDepth(100),
     m_imageHeight(screenHeight),
     m_imageWidth(screenWidth),

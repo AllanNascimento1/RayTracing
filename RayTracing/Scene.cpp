@@ -13,7 +13,7 @@ MyRT::Scene::Scene() {
 
 	//initialize camera
 	m_camera.setLookAt(Point3(0.0, 0.0, 0.0));
-	m_camera.setOrigin(Point3(0.0, 2.0, -2.0));
+	m_camera.setOrigin(Point3(0.0, 7.0, -7.0));
 }
 
 bool test = false;
@@ -38,7 +38,7 @@ bool MyRT::Scene::render(Image& outImage) {
 
 	/**/
 	const shared_ptr<Material> NONE = make_shared<Material>(Material());
-	const shared_ptr<Lambertian> LAMB_TEMP1 = make_shared<Lambertian>(Color(0.6, 0.6, 0.6));
+	const shared_ptr<Lambertian> LAMB_TEMP1 = make_shared<Lambertian>(Color(1.0, 1.0, 1.0));
 
 	/*
 	world.add(std::make_shared<Sphere>(Point3(3.0, -3.0, 5.0), 0.5, NONE));
@@ -54,10 +54,10 @@ bool MyRT::Scene::render(Image& outImage) {
 	/**/
 	world.add(std::make_shared<Sphere>(Point3(0.0, 0.0, 0.0), 0.5, LAMB_TEMP1));
 	
-	world.add(std::make_shared<Sphere>(Point3(1.0, 0.0, 0.0), 0.5, NONE));
-	world.add(std::make_shared<Sphere>(Point3(-1.0, 0.0, 0.0), 0.5, NONE));
-	world.add(std::make_shared<Sphere>(Point3(0.0, 0.0, 1.0), 0.5, NONE));
-	world.add(std::make_shared<Sphere>(Point3(0.0, 0.0, -1.0), 0.5, NONE));
+	world.add(std::make_shared<Sphere>(Point3(5.0, 0.0, 0.0), 0.5, NONE));
+	world.add(std::make_shared<Sphere>(Point3(-5.0, 0.0, 0.0), 0.5, NONE));
+	world.add(std::make_shared<Sphere>(Point3(0.0, 0.0, 5.0), 0.5, NONE));
+	world.add(std::make_shared<Sphere>(Point3(0.0, 0.0, -5.0), 0.5, NONE));
 	/**/
 
 	//world.add(std::make_shared<Square>(NONE));
