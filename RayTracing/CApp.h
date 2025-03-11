@@ -16,6 +16,7 @@ class CApp
 		void onLoop();
 		void onRender();
 		void onExit();
+		void createFile();
 
 	private:
 		//Beatiful lil goobers

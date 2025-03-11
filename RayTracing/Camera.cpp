@@ -9,13 +9,27 @@ MyRT::Camera::Camera(int screenWidth, int screenHeight)
     m_focusDistance(1.0),
     m_defocusAngle(1.0),
     m_fovAngle(80.0),
-    m_numberSamples(5),
+    m_numberSamples(30),
     m_limitDepth(100),
     m_imageHeight(screenHeight),
     m_imageWidth(screenWidth),
     m_aspectRatio(static_cast<double>(screenWidth) / screenHeight) {}
 
 MyRT::Camera::Camera() : Camera(600, 960) {}
+
+inline Color linearToGamma(Color linearColor) {
+    double r = linearColor.x();
+    double g = linearColor.y();
+    double b = linearColor.z();
+
+    r = (r > 0) ? std::sqrt(r) : 0;
+    g = (g > 0) ? std::sqrt(g) : 0;
+    b = (b > 0) ? std::sqrt(b) : 0;
+
+    return Color(r, g, b);
+}
+
+uint32_t seed = 13;
 
 void MyRT::Camera::render(Image &outImage, const Hittable& obj) const{
     for (int y = 0; y < m_imageHeight; y++) {
@@ -25,7 +39,6 @@ void MyRT::Camera::render(Image &outImage, const Hittable& obj) const{
             Color color = Color();
             for (int sample = 0; sample < m_numberSamples; sample++) {
                 //calculates ray vector (not a unit vector)
-                uint32_t seed = y + x + sample;
                 Ray ray = raySample( x , y , seed);
 
                 //find the color of the pixel
@@ -39,7 +52,7 @@ void MyRT::Camera::render(Image &outImage, const Hittable& obj) const{
             //Set the color found on the image
             
             //Normal (normal colors)
-            outImage.setPixel(x, y, color * 255.0);
+            outImage.setPixel(x, y, linearToGamma(color) * 255.0);
 
             /*
             //Black and White (pretty cool)
@@ -78,12 +91,12 @@ Color MyRT::Camera::rayColor(const Ray& ray, const Hittable& obj, int depth) con
 
     Vec3 unitDirection = unit_vector(ray.direction());
     double a = 0.5 * (unitDirection.y() + 1.0);
-    return (1.0 - a) * Vec3(1.0, 1.0, 1.0) + a * Vec3(0.3, 0.5, 1.);
-    //return (1.0 - a) * Vec3(0.0, 0.0, 0.0) + a * Vec3(0.0, 0.0, 0.0); //The void
+    //return (1.0 - a) * Vec3(1.0, 1.0, 1.0) + a * Vec3(0.3, 0.5, 1.);
+    return (1.0 - a) * Vec3(0.0, 0.0, 0.0) + a * Vec3(0.0, 0.0, 0.0); //The void
 }
  
 MyRT::Ray MyRT::Camera::raySample(int i, int j, uint32_t seed) const {
-    Vec3 offset = Vec3::randomUnitVec(seed); //RandomVec è TROPPO lento
+    Vec3 offset = Vec3::randomUnitVec(seed);
     Vec3 direction = m_pixel00 + ((offset.x() + i) * m_pixelDeltaW) - ((offset.y() + j) * m_pixelDeltaH);
 
     return Ray(m_orig, direction - m_orig);
@@ -100,7 +113,7 @@ void MyRT::Camera::updateCameraGeometry() {
 
     double height = tan(radians(m_fovAngle)/2.);
     double viewportHeight = 2.0 * height * m_focusDistance;
-    double viewportWidth = viewportHeight * m_aspectRatio;
+    double viewportWidth = viewportHeight * (static_cast<double>(m_imageWidth) / m_imageHeight);
     Vec3 viewportHvec = viewportHeight * m_up;
     Vec3 viewportWvec = viewportWidth * m_right;
 

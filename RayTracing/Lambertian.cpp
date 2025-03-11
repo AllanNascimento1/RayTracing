@@ -13,7 +13,7 @@ bool MyRT::Lambertian::scatter(const Ray& rayIn, const HitRecord& rec, Color& at
 	att = Color(0.0, 0.0, 0.0);
 	if (rec.isOutside) {
 		att = m_albedo;
-		seedTemp += rayIn.direction().x() + rec.p.y();
+		//seedTemp += rayIn.direction().x() + rec.p.y();
 		rayOut = Ray(rec.p, rec.normal + Vec3::randomUnitVec(seedTemp));
 	}
 	return rec.isOutside;

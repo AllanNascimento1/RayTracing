@@ -78,8 +78,6 @@ public:
     /**/
 };
 
-
-
 // point3 and Color is just an alias for Vec3.
 using Point3 = Vec3;
 using Color = Vec3;

@@ -13,6 +13,10 @@ namespace MyRT {
 
 			virtual ~Material() = default;
 
+			virtual Color emitted(double u, double v, const Point3& p) const {
+				return Color(0, 0, 0);
+			}
+
 			virtual bool scatter(const Ray& rayIn, const HitRecord& rec, Color& att, Ray& rayOut) const;
 	};
 	

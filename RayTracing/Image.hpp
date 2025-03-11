@@ -13,7 +13,7 @@ class Image {
 
 		~Image();
 
-		//Main funcitions
+		//Main functions
 		void initialize(const int xSize, const int ySize, SDL_Renderer* renderer);
 
 		void display();
@@ -24,6 +24,10 @@ class Image {
 
 		void setPixel(const int x, const int y, const Color color);
 
+		int m_xSize, m_ySize;
+
+		std::vector<std::vector<Color>> m_colorChannel;
+
 	private:
 		//utility function
 		Uint32 convertColor(const Color color);
@@ -31,10 +35,6 @@ class Image {
 		void initTexture();
 
 	private:
-		std::vector<std::vector<Color>> m_colorChannel;
-
-		int m_xSize, m_ySize;
-
 		SDL_Renderer* m_pRenderer;
 		SDL_Texture* m_pTexture;
 };

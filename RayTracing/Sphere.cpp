@@ -13,8 +13,8 @@ MyRT::Sphere::Sphere(const Point3 center, const double radious, const shared_ptr
 bool MyRT::Sphere::hit(const Ray& r, Interval interval, HitRecord& rec) const {
     //Interval interval;
 
-    Vec3 matrixVecX = Vec3(1.0 / 5.0, 0.0, 0.0);
-    Vec3 matrixVecY = Vec3(0.0, 1.0 / 5.0, 0.0);
+    Vec3 matrixVecX = Vec3(1.0 / 1.0, 0.0, 0.0);
+    Vec3 matrixVecY = Vec3(0.0, 1.0 / 1.0, 0.0);
     Vec3 matrixVecZ = Vec3(0.0, 0.0, 1.0 / 1.0);
 
     Vec3 tempDir = (r.direction() * matrixVecX) + (r.direction() * matrixVecY) + (r.direction() * matrixVecZ);
