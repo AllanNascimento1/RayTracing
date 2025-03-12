@@ -12,14 +12,9 @@ namespace MyRT
 
 			bool render(Image& outImage);
 
-			Camera& getCamera() { return m_camera; }
-
-		private:
-
-
-		private:
 			Camera m_camera;
 
+			HittableList world;
 	};
 }
 #endif

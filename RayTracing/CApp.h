@@ -18,18 +18,19 @@ class CApp
 		void onExit();
 		void createFile();
 
-	private:
-		//Beatiful lil goobers
-		Image m_image;
 		MyRT::Scene m_scene;
+
+		int m_wWindow;
+		int m_hWindow;
+
+	private:
+		Image m_image;
 
 		//SDL2
 		bool isRunning;
 		SDL_Window* m_pWindow;
 		SDL_Renderer* m_pRenderer;
 
-		int m_wWindow;
-		int m_hWindow;
 };
 
 #endif

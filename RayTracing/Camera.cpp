@@ -9,7 +9,7 @@ MyRT::Camera::Camera(int screenWidth, int screenHeight)
     m_focusDistance(1.0),
     m_defocusAngle(1.0),
     m_fovAngle(80.0),
-    m_numberSamples(30),
+    m_numberSamples(5),
     m_limitDepth(100),
     m_imageHeight(screenHeight),
     m_imageWidth(screenWidth),
@@ -29,9 +29,7 @@ inline Color linearToGamma(Color linearColor) {
     return Color(r, g, b);
 }
 
-uint32_t seed = 13;
-
-void MyRT::Camera::render(Image &outImage, const Hittable& obj) const{
+void MyRT::Camera::render(Image &outImage, const Hittable& world) const{
     for (int y = 0; y < m_imageHeight; y++) {
         for (int x = 0; x < m_imageWidth; x++) {
             
@@ -39,13 +37,13 @@ void MyRT::Camera::render(Image &outImage, const Hittable& obj) const{
             Color color = Color();
             for (int sample = 0; sample < m_numberSamples; sample++) {
                 //calculates ray vector (not a unit vector)
-                Ray ray = raySample( x , y , seed);
+                Ray ray = raySample( x , y);
 
                 //find the color of the pixel
                 HitRecord rec = HitRecord();
 
                 
-                color += rayColor(ray, obj, 0);
+                color += rayColor(ray, world, 0);
                 
             }
             color = color / m_numberSamples;
@@ -65,38 +63,35 @@ void MyRT::Camera::render(Image &outImage, const Hittable& obj) const{
     }
 }
 
-Color MyRT::Camera::rayColor(const Ray& ray, const Hittable& obj, int depth) const {
+Color MyRT::Camera::rayColor(const Ray& ray, const Hittable& world, int depth) const {
     if (depth > m_limitDepth) {
         return Color(0.0, 0.0, 0.0);
     }
 
     HitRecord rec = HitRecord();
-    
-    //Vec3 lightDir = Vec3(-1.0, -1.0, 1.0);
-    /**/
-    if (obj.hit(ray, Interval(0.0001, RT_INFINITY), rec)) {
+
+    if (world.hit(ray, Interval(0.0001, RT_INFINITY), rec)) {
         Ray rOut = Ray();
         Color att = Color();
-        
+        Color emittedCol = rec.mat->emitted();
         
         if (rec.mat->scatter(ray, rec, att, rOut)) {
-            //std::cout << rOut.origin() << std::endl;
-            return att * rayColor(rOut, obj, depth+1);
-        }
-        
 
-        return att; //* dot(-rec.normal,lightDir);
+            return ( att * rayColor(rOut, world, depth+1) ) + emittedCol;
+
+        }
+
+        return emittedCol;
     }
-    /**/
 
     Vec3 unitDirection = unit_vector(ray.direction());
     double a = 0.5 * (unitDirection.y() + 1.0);
-    //return (1.0 - a) * Vec3(1.0, 1.0, 1.0) + a * Vec3(0.3, 0.5, 1.);
-    return (1.0 - a) * Vec3(0.0, 0.0, 0.0) + a * Vec3(0.0, 0.0, 0.0); //The void
+    return (1.0 - a) * Vec3(1.0, 1.0, 1.0) + a * Vec3(0.3, 0.5, 1.);
+    //return Color(0.0, 0.0, 0.0); //The void
 }
  
-MyRT::Ray MyRT::Camera::raySample(int i, int j, uint32_t seed) const {
-    Vec3 offset = Vec3::randomUnitVec(seed);
+MyRT::Ray MyRT::Camera::raySample(int i, int j) const {
+    Vec3 offset = Vec3::randomUnitVec();
     Vec3 direction = m_pixel00 + ((offset.x() + i) * m_pixelDeltaW) - ((offset.y() + j) * m_pixelDeltaH);
 
     return Ray(m_orig, direction - m_orig);

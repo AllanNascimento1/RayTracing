@@ -1,4 +1,4 @@
-#include "HittableList.hpp"
+#include "Hittable.hpp"
 
 bool MyRT::HittableList::hit(const Ray& r, Interval interval, HitRecord& rec) const {
 	HitRecord tempRec;

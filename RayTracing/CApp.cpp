@@ -5,6 +5,31 @@
 uint32_t frame = 0;
 uint32_t addingFrames = 1;
 
+
+void addImage(Image& outImg, Image& adderImg) {
+	std::vector<std::vector<Color>> outColors = outImg.m_colorChannel;
+	std::vector<std::vector<Color>> adderColors = adderImg.m_colorChannel;
+
+	for (int y = 0; y < outImg.getYSize(); y++) {
+		for (int x = 0; x < outImg.getXSize(); x++) {
+			Color col = (outColors.at(x).at(y) * (addingFrames - 1) + adderColors.at(x).at(y)) / addingFrames;
+			outImg.setPixel(x, y, col);
+		}
+	}
+
+	addingFrames++;
+}
+
+void resetImage(Image& outImg) {
+	for (int y = 0; y < outImg.getYSize(); y++) {
+		for (int x = 0; x < outImg.getXSize(); x++) {
+			outImg.setPixel(x, y, Color(0, 0, 0));
+		}
+	}
+
+	addingFrames = 1;
+}
+
 CApp::CApp() {
 	m_wWindow = 960; //960 720 480 240
 	m_hWindow = 600; //600 450 300 150
@@ -54,8 +79,10 @@ int CApp::onExecute() {
 
 		frame++;
 
-		//createFile();
-		//break;
+		/* For High sample Scenes 
+		createFile();
+		break;
+		/**/
 	}
 }
 
@@ -64,39 +91,39 @@ void CApp::onEvent(SDL_Event* event) {
 		isRunning = false;
 	}
 
-	/**/
 	else if(event->type == SDL_KEYDOWN){
 		char keyPressed = event->key.keysym.sym;
+		MyRT::Camera& cam = m_scene.m_camera;
 		switch (keyPressed) {
 				// rotate the camera - - - - - - - - - - - - - - - - -
 			case 'a':
-				m_scene.getCamera().moveLookAt(Vec3(-0.1, 0.0, 0.0));
+				cam.moveLookAt(Vec3(-0.1, 0.0, 0.0));
 				break;
 			case 'd':
-				m_scene.getCamera().moveLookAt(Vec3(0.1, 0.0, 0.0));
+				cam.moveLookAt(Vec3(0.1, 0.0, 0.0));
 				break;
 			case 's':
-				m_scene.getCamera().moveLookAt(Vec3(0.0, -0.1, 0.0));
+				cam.moveLookAt(Vec3(0.0, -0.1, 0.0));
 				break;
 			case 'w':
-				m_scene.getCamera().moveLookAt(Vec3(0.0, 0.1, 0.0));
+				cam.moveLookAt(Vec3(0.0, 0.1, 0.0));
 				break;
 				// rotate towards the center of the world - - - - - -
 			case 'e':
-				m_scene.getCamera().m_lookAt = Vec3(0.0, 0.0, 0.0);
+				cam.m_lookAt = Vec3(0.0, 0.0, 0.0);
 				break;
 				// move camera  - - - - - - - - - - - - - - - - - - - 
 			case 'j':
-				m_scene.getCamera().moveOrig(Vec3(-0.1, 0.0, 0.0));
+				cam.moveOrig(Vec3(-0.1, 0.0, 0.0));
 				break;
 			case 'l':
-				m_scene.getCamera().moveOrig(Vec3(0.1, 0.0, 0.0));
+				cam.moveOrig(Vec3(0.1, 0.0, 0.0));
 				break;
 			case 'k':
-				m_scene.getCamera().moveOrig(Vec3(0.0, -0.1, 0.0));
+				cam.moveOrig(Vec3(0.0, -0.1, 0.0));
 				break;
 			case 'i':
-				m_scene.getCamera().moveOrig(Vec3(0.0, 0.1, 0.0));
+				cam.moveOrig(Vec3(0.0, 0.1, 0.0));
 				break;
 				// make a photo - - - - - - - - - - - - - - - - - - - 
 			case 'p':
@@ -104,26 +131,13 @@ void CApp::onEvent(SDL_Event* event) {
 				std::clog << "photo saved" << std::endl;
 				break;
 		}
+		resetImage(m_image);
 	}
 	/**/
 }
 
 void CApp::onLoop() {
 	//m_scene.getCamera().moveOrig(Vec3(0.0, 0.1, 0.0));
-}
-
-void addImage(Image &outImg, Image &adderImg) {
-	std::vector<std::vector<Color>> outColors = outImg.m_colorChannel;
-	std::vector<std::vector<Color>> adderColors = adderImg.m_colorChannel;
-
-	for (int y = 0; y < outImg.getYSize(); y++) {
-		for (int x = 0; x < outImg.getXSize(); x++) {
-			Color col = ( outColors.at(x).at(y) * (addingFrames - 1) + adderColors.at(x).at(y) ) / addingFrames;
-			outImg.setPixel(x,y,col);
-		}
-	}
-
-	addingFrames++;
 }
 
 void CApp::onRender() {

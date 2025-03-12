@@ -13,17 +13,18 @@ namespace MyRT {
 
 			virtual ~Material() = default;
 
-			virtual Color emitted(double u, double v, const Point3& p) const {
+			virtual Color emitted() const {
 				return Color(0, 0, 0);
 			}
 
-			virtual bool scatter(const Ray& rayIn, const HitRecord& rec, Color& att, Ray& rayOut) const;
+			virtual bool scatter(const Ray& rayIn, const HitRecord& rec, Color& att, Ray& rayOut) const { 
+				return false; 
+			}
 	};
 	
 	class Lambertian : public Material{
 		public:
 
-			Lambertian();
 			Lambertian(const Color& albedo) : m_albedo(albedo) {}
 
 			bool scatter(const Ray& rayIn, const HitRecord& rec, Color& att, Ray& rayOut) const override;
@@ -31,6 +32,21 @@ namespace MyRT {
 		private:
 
 			Color m_albedo;
+
+	};
+
+	class Diffuse : public Material {
+	public:
+
+		Diffuse(const Color& albedo) : m_albedo(albedo) {}
+
+		bool scatter(const Ray& rayIn, const HitRecord& rec, Color& att, Ray& rayOut) const { return false; }
+
+		Color emitted() const;
+
+	private:
+
+		Color m_albedo;
 
 	};
 		

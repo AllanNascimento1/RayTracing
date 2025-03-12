@@ -13,7 +13,7 @@ namespace MyRT
             Camera();
 			Camera(int hScreen, int wScreen);
 
-            void render(Image& outImage, const Hittable& obj) const;
+            void render(Image& outImage, const Hittable& world) const;
             void updateCameraGeometry();
 
             void moveLookAt(Vec3 vec) { m_lookAt += unit_vector(vec.x()*m_right + vec.y()*m_up); };
@@ -48,8 +48,8 @@ namespace MyRT
 
         private:
 
-            Color rayColor(const Ray& ray, const Hittable& obj, int depth) const;
-            Ray raySample(int i , int j, uint32_t seed) const;
+            Color rayColor(const Ray& ray, const Hittable& world, int depth) const;
+            Ray raySample(int i , int j) const;
 
 		private:
             double m_aspectRatio;

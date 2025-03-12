@@ -4,78 +4,104 @@
 #include <cmath>
 #include <iostream>
 
+static uint32_t mainSeed = 453;
 
 inline uint32_t PCG_Hash(uint32_t input) {
-    return input * 1664525u + 1013904223u; // Simpler hash
+    return input * 1664525u + 1013904223u;
+}
+
+inline double randomDouble() {
+    mainSeed = PCG_Hash(mainSeed);
+    return mainSeed * (1.0 / 4294967295.0);
 }
 
 inline double randomDouble(uint32_t& seed) {
     seed = PCG_Hash(seed);
-    return seed * (1.0 / 4294967295.0); // Replace division with multiplication
+    return seed * (1.0 / 4294967295.0);
 }
 
 class Vec3 {
-public:
-    double e[3];
+    public:
+        double e[3];
 
-    Vec3() : e{ 0,0,0 } {}
-    Vec3(double e0, double e1, double e2) : e{ e0, e1, e2 } {}
+        Vec3() : e{ 0,0,0 } {}
+        Vec3(double e0, double e1, double e2) : e{ e0, e1, e2 } {}
 
-    double x() const { return e[0]; }
-    double y() const { return e[1]; }
-    double z() const { return e[2]; }
+        double x() const { return e[0]; }
+        double y() const { return e[1]; }
+        double z() const { return e[2]; }
 
-    Vec3 operator-() const { return Vec3(-e[0], -e[1], -e[2]); }
-    double operator[](int i) const { return e[i]; }
-    double& operator[](int i) { return e[i]; }
+        Vec3 operator-() const { return Vec3(-e[0], -e[1], -e[2]); }
+        double operator[](int i) const { return e[i]; }
+        double& operator[](int i) { return e[i]; }
 
-    Vec3& operator+=(const Vec3& v) {
-        e[0] += v.e[0];
-        e[1] += v.e[1];
-        e[2] += v.e[2];
-        return *this;
-    }
+        Vec3& operator+=(const Vec3& v) {
+            e[0] += v.e[0];
+            e[1] += v.e[1];
+            e[2] += v.e[2];
+            return *this;
+        }
 
-    Vec3& operator*=(double t) {
-        e[0] *= t;
-        e[1] *= t;
-        e[2] *= t;
-        return *this;
-    }
+        Vec3& operator*=(double t) {
+            e[0] *= t;
+            e[1] *= t;
+            e[2] *= t;
+            return *this;
+        }
 
-    Vec3& operator/=(double t) {
-        return *this *= 1 / t;
-    }
+        Vec3& operator/=(double t) {
+            return *this *= 1 / t;
+        }
 
-    double length() const {
-        return std::sqrt(length_squared());
-    }
+        double length() const {
+            return std::sqrt(length_squared());
+        }
 
-    double length_squared() const {
-        return (e[0] * e[0]) + (e[1] * e[1]) + (e[2] * e[2]);
-    }
+        double length_squared() const {
+            return (e[0] * e[0]) + (e[1] * e[1]) + (e[2] * e[2]);
+        }
 
-    /**/
-    static Vec3 randomVec(uint32_t& seed, double min , double max) {
-        return Vec3(
-            (randomDouble(seed) * (max - min)) + min,
-            (randomDouble(seed) * (max - min)) + min,
-            (randomDouble(seed) * (max - min)) + min
-        );
-    }
+        /* Randoms */
 
-    static Vec3 randomUnitVec(uint32_t& seed) {
-        while (true) {
-            Vec3 randVec = Vec3::randomVec(seed, -1.0, 1.0);
+        static Vec3 randomVec(uint32_t& seed, double min , double max) {
+            return Vec3(
+                (randomDouble(seed) * (max - min)) + min,
+                (randomDouble(seed) * (max - min)) + min,
+                (randomDouble(seed) * (max - min)) + min
+            );
+        }
 
-            double lengSqrt = randVec.length_squared();
+        static Vec3 randomVec(double min, double max) {
+            return Vec3(
+                (randomDouble() * (max - min)) + min,
+                (randomDouble() * (max - min)) + min,
+                (randomDouble() * (max - min)) + min
+            );
+        }
 
-            if (1e-160 < lengSqrt && lengSqrt < 1.0) {
-                return randVec;
+        static Vec3 randomUnitVec(uint32_t& seed) {
+            while (true) {
+                Vec3 randVec = Vec3::randomVec(seed, -1.0, 1.0);
+
+                double lengSqrt = randVec.length_squared();
+
+                if (1e-160 < lengSqrt && lengSqrt < 1.0) {
+                    return randVec;
+                }
             }
         }
-    }
-    /**/
+
+        static Vec3 randomUnitVec() {
+            while (true) {
+                Vec3 randVec = Vec3::randomVec(-1.0, 1.0);
+
+                double lengSqrt = randVec.length_squared();
+
+                if (1e-160 < lengSqrt && lengSqrt < 1.0) {
+                    return randVec;
+                }
+            }
+        }
 };
 
 // point3 and Color is just an alias for Vec3.
