@@ -33,6 +33,11 @@ namespace MyRT
             //where it is looking
             Vec3 m_lookAt;
 
+            //how it is orientated in the scene
+            Vec3 m_up;
+            Vec3 m_foward;
+            Vec3 m_right;
+
             //field of view
             double m_fovAngle;
 
@@ -46,6 +51,8 @@ namespace MyRT
             double m_defocusAngle;
             double m_focusDistance;
 
+            Color m_background;
+
         private:
 
             Color rayColor(const Ray& ray, const Hittable& world, int depth) const;
@@ -54,10 +61,6 @@ namespace MyRT
 		private:
             double m_aspectRatio;
 
-            //how it is orientated in the scene
-            Vec3 m_up;
-            Vec3 m_foward;
-            Vec3 m_right;
 
             //Screen position in the scene
             Point3 m_pixel00;

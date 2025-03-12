@@ -13,8 +13,7 @@ namespace MyRT
 			bool render(Image& outImage);
 
 			Camera m_camera;
-
-			HittableList world;
+			HittableList m_world;
 	};
 }
 #endif

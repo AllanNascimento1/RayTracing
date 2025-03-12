@@ -9,10 +9,11 @@ MyRT::Camera::Camera(int screenWidth, int screenHeight)
     m_focusDistance(1.0),
     m_defocusAngle(1.0),
     m_fovAngle(80.0),
-    m_numberSamples(5),
+    m_numberSamples(10),
     m_limitDepth(100),
     m_imageHeight(screenHeight),
     m_imageWidth(screenWidth),
+    m_background(Color()),
     m_aspectRatio(static_cast<double>(screenWidth) / screenHeight) {}
 
 MyRT::Camera::Camera() : Camera(600, 960) {}
@@ -84,10 +85,7 @@ Color MyRT::Camera::rayColor(const Ray& ray, const Hittable& world, int depth) c
         return emittedCol;
     }
 
-    Vec3 unitDirection = unit_vector(ray.direction());
-    double a = 0.5 * (unitDirection.y() + 1.0);
-    return (1.0 - a) * Vec3(1.0, 1.0, 1.0) + a * Vec3(0.3, 0.5, 1.);
-    //return Color(0.0, 0.0, 0.0); //The void
+    return m_background; //The void
 }
  
 MyRT::Ray MyRT::Camera::raySample(int i, int j) const {
