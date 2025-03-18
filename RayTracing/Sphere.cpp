@@ -1,18 +1,25 @@
 #include "Sphere.hpp"
 
-MyRT::Sphere::Sphere() 
+using namespace MyRT;
+
+Sphere::Sphere() 
     : m_center(Point3(0.0, 0.0, 0.0)), 
     m_radius(1.0), 
-    m_material(std::make_shared<Material>(Material())) {}
+    m_material(std::make_shared<Material>(Material())),
+    m_aabb(Point3(0.0), Point3(0.0)) {}
 
-MyRT::Sphere::Sphere(const Point3 center, const double radious, const shared_ptr<Material> material)
+Sphere::Sphere(const Point3 center, const double radious, const shared_ptr<Material> material)
     : m_center(center), 
     m_radius(radious), 
-    m_material(material){}
+    m_material(material){
+        Point3 vert1 = m_center + Vec3(m_radius/2);
+        Point3 vert2 = m_center - Vec3(m_radius/2);
+        m_aabb = AaBoundingBox(vert1, vert2);
+}
 
-bool MyRT::Sphere::hit(const Ray& r, Interval interval, HitRecord& rec) const {
-    //Interval interval;
-
+bool Sphere::hit(const Ray& r, Interval interval, HitRecord& rec) const {
+    if (!m_aabb.hit(r, interval)) { return false; }
+    /* Se vuoi trasformazioni
     Vec3 matrixVecX = Vec3(1.0 / 1.0, 0.0, 0.0);
     Vec3 matrixVecY = Vec3(0.0, 1.0 / 1.0, 0.0);
     Vec3 matrixVecZ = Vec3(0.0, 0.0, 1.0 / 1.0);
@@ -26,8 +33,9 @@ bool MyRT::Sphere::hit(const Ray& r, Interval interval, HitRecord& rec) const {
     auto a = tempDir.length_squared();
     auto h = dot(tempDir, oc);
     auto c = oc.length_squared() - m_radius * m_radius;
-    
-    /*
+    /**/
+
+    /**/
     Vec3 oc = m_center - r.origin();
     auto a = r.direction().length_squared();
     auto h = dot(r.direction(), oc);
@@ -54,8 +62,11 @@ bool MyRT::Sphere::hit(const Ray& r, Interval interval, HitRecord& rec) const {
     rec.mat = m_material;
     rec.t = root;
     rec.p = r.at(root);
+    Vec3 normal = (r.at(root) - m_center) / m_radius;
+    /* Se vuoi traformazioni
     Vec3 normal = (tempRay.at(root) - tempCenter) / m_radius;
     normal = (normal * matrixVecX) + (normal * matrixVecY) + (normal * matrixVecZ);
+    /**/
     rec.setFaceNormal(r, unit_vector(normal));
 
     return true;

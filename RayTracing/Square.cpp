@@ -1,3 +1,4 @@
+/*
 #include "Square.hpp"
 
 bool MyRT::Square::hit(const Ray& r, Interval interval, HitRecord& rec) const {
@@ -21,3 +22,4 @@ bool MyRT::Square::hit(const Ray& r, Interval interval, HitRecord& rec) const {
 
 	return false;
 }
+*/

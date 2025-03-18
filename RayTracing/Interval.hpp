@@ -10,7 +10,8 @@ class Interval {
 		double max, min;
 
         Interval();
-        Interval(const double min, const double max);
+        Interval(double min, double max);
+        Interval(const Interval inter1, const Interval inter2);
 
         double size() const {
             return max - min;

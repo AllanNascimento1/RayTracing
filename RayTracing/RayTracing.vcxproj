@@ -133,6 +133,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AaBoundingBox.cpp" />
+    <ClCompile Include="AaBoundingBox.hpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CApp.cpp" />
     <ClCompile Include="Hittable.hpp" />

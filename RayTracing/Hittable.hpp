@@ -7,6 +7,7 @@
 #include "RTutility.hpp"
 #include "Ray.hpp"
 #include "Material.hpp"
+#include "AaBoundingBox.hpp"
 
 using std::make_shared;
 using std::shared_ptr;
@@ -33,21 +34,27 @@ namespace MyRT {
             virtual ~Hittable() = default;
 
             virtual bool hit(const Ray& r, Interval interval, HitRecord& rec) const = 0;
+
+            virtual AaBoundingBox getAabb() const = 0;
     };
 
     class HittableList : public Hittable {
-    public:
-        std::vector<shared_ptr<Hittable>> m_objects;
+        public:
+            std::vector<shared_ptr<Hittable>> m_objects;
 
-        HittableList() {}
-        HittableList(shared_ptr<Hittable> object) { add(object); }
+            HittableList() {}
+            HittableList(shared_ptr<Hittable> object) { add(object); }
 
-        void add(shared_ptr<Hittable> obj) {
-            m_objects.push_back(obj);
-        }
+            void add(shared_ptr<Hittable> obj) {
+                m_objects.push_back(obj);
+            }
 
-        bool hit(const Ray& r, Interval interval, HitRecord& rec) const override;
+            bool hit(const Ray& r, Interval interval, HitRecord& rec) const override;
 
+            AaBoundingBox getAabb() const override { return m_aabb;  }
+
+        private:
+            AaBoundingBox m_aabb;
     };
 
 }

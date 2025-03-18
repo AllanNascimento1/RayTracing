@@ -1,6 +1,6 @@
 #ifndef SQUARE_HPP
 #define SQUARE_HPP
-
+/*
 #include "Interval.hpp"
 #include "Hittable.hpp"
 #include "Ray.hpp"
@@ -28,4 +28,5 @@ namespace MyRT
 			shared_ptr<Material> m_material;
 	};
 }
+*/
 #endif

@@ -14,10 +14,13 @@ namespace MyRT {
 
 			bool hit(const Ray& r, Interval interval, HitRecord& rec) const override;
 
+			AaBoundingBox getAabb() const override { return m_aabb; }
+
 		private:
 			Point3 m_center;
 			double m_radius;
 			shared_ptr<Material> m_material;
+			AaBoundingBox m_aabb;
 	};
 
 }
