@@ -1,6 +1,8 @@
 #include "Hittable.hpp"
 
 bool MyRT::HittableList::hit(const Ray& r, Interval interval, HitRecord& rec) const {
+	//if (!m_aabb.hit(r, interval)) { return false; }
+
 	HitRecord tempRec;
 	bool hitAnything = false;
 	double closestSoFar = interval.max;

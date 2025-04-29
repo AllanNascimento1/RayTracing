@@ -6,13 +6,13 @@ uint32_t frame = 0;
 uint32_t addingFrames = 1;
 
 
-void addImage(Image& outImg, Image& adderImg) {
+void addImage(Image& outImg, Image& adderImg, int numSamples) {
 	std::vector<std::vector<Color>> outColors = outImg.m_colorChannel;
 	std::vector<std::vector<Color>> adderColors = adderImg.m_colorChannel;
 
 	for (int y = 0; y < outImg.getYSize(); y++) {
 		for (int x = 0; x < outImg.getXSize(); x++) {
-			Color col = (outColors.at(x).at(y) * (addingFrames - 1) + adderColors.at(x).at(y)) / addingFrames;
+			Color col = ((outColors.at(x).at(y) * (addingFrames - 1)) + adderColors.at(x).at(y)) / addingFrames;
 			outImg.setPixel(x, y, col);
 		}
 	}
@@ -125,6 +125,16 @@ void CApp::onEvent(SDL_Event* event) {
 			case 'i':
 				cam.moveOrig(Vec3(0.0, 0.1, 0.0));
 				break;
+				// change numSamples
+			case 'z':
+				cam.m_numberSamples = 1;
+				break;
+			case 'x':
+				cam.m_numberSamples = 15;
+				break;
+			case 'c':
+				cam.m_numberSamples = 100;
+				break;
 				// make a photo - - - - - - - - - - - - - - - - - - - 
 			case 'p':
 				createFile();
@@ -151,7 +161,7 @@ void CApp::onRender() {
 	m_scene.render(tempImg);
 	std::clog << "Render time: " << (SDL_GetTicks() - start) << "ms" << ' '  << std::flush;
 
-	addImage(m_image, tempImg);
+	addImage(m_image, tempImg, m_scene.m_camera.m_numberSamples);
 
 	start = SDL_GetTicks();
 	m_image.display();

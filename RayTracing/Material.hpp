@@ -36,17 +36,17 @@ namespace MyRT {
 	};
 
 	class Diffuse : public Material {
-	public:
+		public:
 
-		Diffuse(const Color& albedo) : m_albedo(albedo) {}
+			Diffuse(const Color& albedo) : m_albedo(albedo) {}
 
-		bool scatter(const Ray& rayIn, const HitRecord& rec, Color& att, Ray& rayOut) const { return false; }
+			bool scatter(const Ray& rayIn, const HitRecord& rec, Color& att, Ray& rayOut) const { return false; }
 
-		Color emitted() const;
+			Color emitted() const;
 
-	private:
+		private:
 
-		Color m_albedo;
+			Color m_albedo;
 
 	};
 		

@@ -97,8 +97,8 @@ MyRT::Ray MyRT::Camera::raySample(int i, int j) const {
 
 void MyRT::Camera::updateCameraGeometry() {
     m_foward = unit_vector(m_lookAt - m_orig);
-    m_right = cross(m_up, m_foward);
-    m_up = cross(m_foward, m_right);
+    m_right = unit_vector(cross(m_up, m_foward));
+    m_up = unit_vector(cross(m_foward, m_right));
 
     double diskRadious = m_focusDistance * tan(radians(m_defocusAngle/2.0));
     m_defocusH = diskRadious * m_up;

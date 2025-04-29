@@ -12,13 +12,12 @@ Sphere::Sphere(const Point3 center, const double radious, const shared_ptr<Mater
     : m_center(center), 
     m_radius(radious), 
     m_material(material){
-        Point3 vert1 = m_center + Vec3(m_radius/2);
-        Point3 vert2 = m_center - Vec3(m_radius/2);
+        Point3 vert1 = m_center + Vec3(m_radius);
+        Point3 vert2 = m_center - Vec3(m_radius);
         m_aabb = AaBoundingBox(vert1, vert2);
 }
 
 bool Sphere::hit(const Ray& r, Interval interval, HitRecord& rec) const {
-    if (!m_aabb.hit(r, interval)) { return false; }
     /* Se vuoi trasformazioni
     Vec3 matrixVecX = Vec3(1.0 / 1.0, 0.0, 0.0);
     Vec3 matrixVecY = Vec3(0.0, 1.0 / 1.0, 0.0);

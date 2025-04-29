@@ -47,6 +47,7 @@ namespace MyRT {
 
             void add(shared_ptr<Hittable> obj) {
                 m_objects.push_back(obj);
+                m_aabb = AaBoundingBox(m_aabb, obj->getAabb());
             }
 
             bool hit(const Ray& r, Interval interval, HitRecord& rec) const override;
