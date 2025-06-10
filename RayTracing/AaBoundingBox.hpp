@@ -18,6 +18,14 @@ class AaBoundingBox{
 
 		Interval getInterval(int n) const;
 
+		int longestAxis() const {
+			if (m_x.size() > m_y.size()) {
+				return m_x.size() > m_z.size() ? 0 : 2;
+			}else {
+				return m_y.size() > m_z.size() ? 1 : 2;
+			}
+		}
+
 	private:
 		Interval m_x;
 		Interval m_y;

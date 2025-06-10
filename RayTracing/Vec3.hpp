@@ -20,6 +20,15 @@ inline double randomDouble(uint32_t& seed) {
     return seed * (1.0 / 4294967295.0);
 }
 
+inline double randomDouble(double start, double end) {
+    double normalVec = randomDouble();
+    return (normalVec * (end - start)) + start;
+}
+
+inline int randomInt(int start, int end) {
+    return int(randomDouble(start-1, end));
+}
+
 class Vec3 {
     public:
         double e[3];

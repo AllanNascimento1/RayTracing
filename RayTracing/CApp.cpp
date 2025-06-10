@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include "CApp.h"
+#include "BVHnode.hpp"
 
 uint32_t frame = 0;
 uint32_t addingFrames = 1;
@@ -86,6 +87,8 @@ int CApp::onExecute() {
 	}
 }
 
+int bvhDepth = -1;
+
 void CApp::onEvent(SDL_Event* event) {
 	if (event->type == SDL_QUIT) {
 		isRunning = false;
@@ -140,6 +143,18 @@ void CApp::onEvent(SDL_Event* event) {
 				createFile();
 				std::clog << "photo saved" << std::endl;
 				break;
+				// change BVH drawing depth
+			case 'v':
+				
+				HittableList world = m_scene.objects;
+				bvhDepth = (bvhDepth+1)%5;
+				
+				BVHnode bvhNode = BVHnode(world, bvhDepth);
+
+				world.add(make_shared<BVHnode>(bvhNode));
+				m_scene.m_world = world;
+				
+				break;
 		}
 		resetImage(m_image);
 	}
@@ -159,13 +174,12 @@ void CApp::onRender() {
 
 	Uint32 start = SDL_GetTicks();
 	m_scene.render(tempImg);
-	std::clog << "Render time: " << (SDL_GetTicks() - start) << "ms" << ' '  << std::flush;
+	std::clog << "Render time: " << (SDL_GetTicks() - start) << "ms" << ' '  << std::endl;
 
 	addImage(m_image, tempImg, m_scene.m_camera.m_numberSamples);
 
 	start = SDL_GetTicks();
 	m_image.display();
-	std::clog << "\nDisplay time: " << (SDL_GetTicks() - start) << "ms\n" << std::flush;
 
 	SDL_RenderPresent(m_pRenderer);
 }

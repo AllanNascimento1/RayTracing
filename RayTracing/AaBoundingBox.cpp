@@ -32,13 +32,10 @@ bool AaBoundingBox::hit(const Ray& ray, Interval baseInter) const {
 		double t1 = (p.min - orig[i]) * tempDir;
 		double t2 = (p.max - orig[i]) * tempDir;
 
-		if (t1 < t2) {
-			if (t1 > baseInter.min) { baseInter.min = t1; }
-			if (t2 < baseInter.max) { baseInter.max = t2; }
-		}else{
-			if (t2 > baseInter.min) { baseInter.min = t2; }
-			if (t1 < baseInter.max) { baseInter.max = t1; }
-		}
+		double t_min = std::min(t1, t2);
+		double t_max = std::max(t1, t2);
+		baseInter.min = std::max(t_min, baseInter.min);
+		baseInter.max = std::min(t_max, baseInter.max);
 
 		if (baseInter.min >= baseInter.max) {
 			return false;

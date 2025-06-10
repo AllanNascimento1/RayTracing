@@ -18,21 +18,6 @@ Sphere::Sphere(const Point3 center, const double radious, const shared_ptr<Mater
 }
 
 bool Sphere::hit(const Ray& r, Interval interval, HitRecord& rec) const {
-    /* Se vuoi trasformazioni
-    Vec3 matrixVecX = Vec3(1.0 / 1.0, 0.0, 0.0);
-    Vec3 matrixVecY = Vec3(0.0, 1.0 / 1.0, 0.0);
-    Vec3 matrixVecZ = Vec3(0.0, 0.0, 1.0 / 1.0);
-
-    Vec3 tempDir = (r.direction() * matrixVecX) + (r.direction() * matrixVecY) + (r.direction() * matrixVecZ);
-    Point3 tempOrig = (r.origin() * matrixVecX) + (r.origin() * matrixVecY) + (r.origin() * matrixVecZ);
-    Point3 tempCenter = (m_center * matrixVecX) + (m_center * matrixVecY) + (m_center * matrixVecZ);
-    Ray tempRay= Ray(tempOrig, tempDir);
-
-    Vec3 oc = tempCenter - tempOrig;
-    auto a = tempDir.length_squared();
-    auto h = dot(tempDir, oc);
-    auto c = oc.length_squared() - m_radius * m_radius;
-    /**/
 
     /**/
     Vec3 oc = m_center - r.origin();
@@ -47,7 +32,6 @@ bool Sphere::hit(const Ray& r, Interval interval, HitRecord& rec) const {
 
     auto sqrtd = std::sqrt(discriminant);
 
-    // Find the nearest root that lies in the acceptable range.
     auto root = (h - sqrtd) / a;
     
     if (!interval.surrounds(root)) {
@@ -56,16 +40,10 @@ bool Sphere::hit(const Ray& r, Interval interval, HitRecord& rec) const {
             return false;
     }
 
-    //std::cout << root << std::endl;
-
     rec.mat = m_material;
     rec.t = root;
     rec.p = r.at(root);
     Vec3 normal = (r.at(root) - m_center) / m_radius;
-    /* Se vuoi traformazioni
-    Vec3 normal = (tempRay.at(root) - tempCenter) / m_radius;
-    normal = (normal * matrixVecX) + (normal * matrixVecY) + (normal * matrixVecZ);
-    /**/
     rec.setFaceNormal(r, unit_vector(normal));
 
     return true;

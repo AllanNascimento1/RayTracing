@@ -14,6 +14,7 @@ namespace MyRT
 
 			Camera m_camera;
 			HittableList m_world;
+			HittableList objects;
 	};
 }
 #endif
